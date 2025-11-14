@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar Competición</title>
+
+  <!-- Bootstrap y FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    /* ======= ESTILOS BASE ======= */
+    body {
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* ======= CONTENIDO ======= */
+    main {
+      margin-top: 100px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    main h1 {
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    main h2 {
+      font-weight: 500;
+      font-size: 1.2rem;
+      text-align: center;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
+
+    .form-control {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .form-control:focus {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border-color: #66ccff;
+      box-shadow: 0 0 10px rgba(102, 204, 255, 0.3);
+    }
+
+    label {
+      color: #ddd;
+    }
+
+    /* ======= BOTONES ======= */
+    .btn-gradient {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      border-radius: 25px;
+      padding: 10px 28px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(118, 75, 162, 0.5);
+      color: white;
+    }
+
+    .btn-outline-light {
+      border-radius: 25px;
+      border: 1px solid #fff;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.05);
+    }
+
+    /* ======= FOOTER ======= */
+    footer {
+      text-align: center;
+      padding: 25px 0;
+      margin-top: 60px;
+      background: rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+
+    footer i {
+      color: #ffd700;
+    }
+
+    footer small {
+      opacity: 0.7;
+    }
+
+    /* ======= EFECTO DE ENTRADA ======= */
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ======= NAVBAR ======= -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-futbol me-2 text-warning"></i>Academia de Fútbol
+      </a>
+    </div>
+  </nav>
+
+  <!-- ======= CONTENIDO PRINCIPAL ======= -->
+  <div class="container d-flex justify-content-center align-items-center flex-column">
+    <main class="col-md-8 col-lg-6 fade-in">
+      <h1><i class="fas fa-medal text-warning"></i> Ingresar Competición</h1>
+      <h2>Ingrese los datos de la competición</h2>
+
+      <form th:action="@{/guardarCompeticion}" th:object="${competicion}" method="post" class="needs-validation" novalidate>
+
+        <input type="hidden" th:field="*{id}" th:value="${competicion.id}"/>
+
+        <div class="mb-3 form-floating">
+          <input type="text" class="form-control" id="nombre" placeholder="Nombre de la Competición" th:field="*{nombre}" required>
+          <label for="nombre">Nombre:</label>
+        </div>
+
+        <div class="mb-3 form-floating">
+          <input type="number" class="form-control" id="montoPremio" placeholder="Monto del Premio" th:field="*{montoPremio}" required>
+          <label for="montoPremio">Monto Premio:</label>
+        </div>
+
+        <div class="mb-3 form-floating">
+          <input type="date" class="form-control" id="fechaInicio" placeholder="Fecha de Inicio" th:field="*{fechaInicio}" required>
+          <label for="fechaInicio">Fecha Inicio:</label>
+        </div>
+
+        <div class="mb-3 form-floating">
+          <input type="date" class="form-control" id="fechaFin" placeholder="Fecha de Fin" th:field="*{fechaFin}" required>
+          <label for="fechaFin">Fecha Fin:</label>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="submit" class="btn btn-gradient w-50 me-3">
+            <i class="fas fa-paper-plane me-2"></i>Enviar
+          </button>
+          <button type="reset" class="btn btn-outline-light w-50">
+            <i class="fas fa-undo me-2"></i>Restablecer
+          </button>
+        </div>
+
+        <div class="text-center mt-4">
+          <a th:href="@{/verCompeticion}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Atrás
+          </a>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- ======= FOOTER ======= -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        <i class="fas fa-code me-2"></i>Desarrollado por <b>Gabriela Nahioby Bayona Bohorquez</b>
+      </p>
+      <small>© 2025 · Sistema de Gestión de Academia de Fútbol · Spring Boot & JPA</small>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
