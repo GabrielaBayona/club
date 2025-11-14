@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar / Editar Club</title>
+
+  <!-- Bootstrap y FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- ESTILOS EXISTENTES -->
+  <style>
+    /* ======= ESTILOS BASE ======= */
+    body {
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* ======= CONTENIDO PRINCIPAL ======= */
+    .form-section {
+      padding: 90px 0 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .form-section h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .form-section h2 {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 35px;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      padding: 40px 35px;
+      max-width: 500px;
+      width: 100%;
+      color: #fff;
+      animation: fadeInUp 0.9s ease forwards;
+      opacity: 0;
+    }
+
+    .form-floating label {
+      color: #ddd;
+    }
+
+    .form-control, .form-select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #66ccff;
+      box-shadow: 0 0 10px rgba(102, 204, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      border-radius: 25px;
+      padding: 10px 28px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(118, 75, 162, 0.5);
+      color: white;
+    }
+
+    .btn-outline-light {
+      border-radius: 25px;
+      color: #fff;
+      border: 2px solid #fff;
+      transition: 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+      background-color: #fff;
+      color: #2c5364;
+      transform: scale(1.05);
+    }
+
+    /* ======= FOOTER ======= */
+    footer {
+      text-align: center;
+      padding: 25px 0;
+      margin-top: 70px;
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+
+    footer i {
+      color: #ffd700;
+    }
+
+    footer small {
+      opacity: 0.7;
+    }
+
+    /* ======= EFECTO DE ENTRADA ======= */
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-futbol me-2 text-warning"></i>Academia de Fútbol
+      </a>
+    </div>
+  </nav>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <h1 th:text="${club.id} == null ? 'Ingresar Club' : 'Editar Club'"></h1>
+    <h2>Complete los datos del club</h2>
+
+    <form th:action="@{/guardarClub}" th:object="${club}" method="post" class="needs-validation" novalidate>
+      
+      <!-- ID oculto -->
+      <input type="hidden" th:field="*{id}" />
+
+      <!-- Nombre -->
+      <div class="mb-3 form-floating">
+        <input type="text" class="form-control" th:field="*{nombre}" placeholder="Nombre del Club" required />
+        <label>Nombre del Club</label>
+      </div>
+
+      <!-- Entrenador -->
+      <div class="mb-3 form-floating">
+        <select class="form-select" th:field="*{entrenador}" required>
+          <option th:each="entrenador : ${entrenadores}" 
+                  th:value="${entrenador.id}" 
+				  th:text="${entrenador.nombre + ' ' + entrenador.apellido}"
+				  th:selected="${club.entrenador != null} ? ${entrenador.id} == ${club.entrenador.id} : false">
+          </option>
+        </select>
+        <label>Entrenador</label>
+      </div>
+
+      <!-- Asociación -->
+      <div class="mb-3 form-floating">
+        <select class="form-select" th:field="*{asociacion}" required>
+          <option th:each="asoc : ${listaAsociacion}" 
+                  th:value="${asoc.id}" 
+                  th:text="${asoc.nombre}"
+                  th:selected="${club.asociacion != null} ? ${asoc.id} == ${club.asociacion.id} : false">
+          </option>
+        </select>
+        <label>Asociación</label>
+      </div>
+
+      <!-- Competiciones -->
+      <div class="mb-4 form-floating">
+        <select class="form-select" th:field="*{competiciones}" multiple>
+          <option th:each="comp : ${listaCompeticion}" 
+                  th:value="${comp.id}" 
+                  th:text="${comp.nombre}"
+                  th:selected="${club.competiciones != null} ? ${club.competiciones.contains(comp)} : false">
+          </option>
+        </select>
+        <label>Competiciones (Ctrl+Click para múltiples)</label>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <input type="submit" class="btn-gradient" value="Guardar">
+        <input type="reset" class="btn btn-outline-light" value="Restablecer">
+      </div>
+
+      <div class="text-center mt-4">
+        <a th:href="@{/verClub}" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
+      </div>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="mb-1"><i class="fas fa-code me-2"></i>Desarrollado por <b>Gabriela Nahioby Bayona Bohorquez</b></p>
+    <small>© 2025 · Sistema de Gestión de Academia de Fútbol · Spring Boot & JPA</small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
